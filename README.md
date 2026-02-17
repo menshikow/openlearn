@@ -29,117 +29,48 @@ cp -r openlearn/.opencode/ ./your-project/
 
 ## Usage
 
-### Step 1: Initialize Your Project
-
-Start opencode in your project directory, then run:
+### Step 1: Initialize
 
 ```
 /openlearn-init
 ```
 
-This will ask you:
-- Your coding background
-- What you're building
-- Your tech stack
-- How to use documentation (auto/suggest/manual)
+Sets up your project with mission, stack, and roadmap.
 
-Creates:
-- `mission.md` - Your project purpose
-- `stack.md` - Technology decisions
-- `roadmap.md` - Development phases
-
-### Step 2: Plan Your Feature
+### Step 2: Plan Feature
 
 ```
 /openlearn-feature
 ```
 
-This will:
-- Show your current roadmap phase
-- Help define the feature
-- Create spec files with acceptance criteria
-- Break it into tasks
+Creates spec files with acceptance criteria and tasks.
 
-Creates:
-- `spec.md` - Requirements
-- `design.md` - Technical approach
-- `tasks.md` - Implementation checklist
-
-### Step 3: Build (You Write the Code!)
-
-While coding, use:
+### Step 3: Build
 
 ```
 /openlearn-guide    # Get Socratic guidance
 /openlearn-stuck    # Debug with Protocol D
 ```
 
-**You write ALL code**. OpenLearn only provides:
-- Patterns (max 8 lines)
-- Questions to guide thinking
-- Documentation references
+You write ALL code. OpenLearn provides patterns (max 8 lines) and guidance.
 
-### Step 4: Complete with Quality Gates
+### Step 4: Complete
 
 ```
 /openlearn-done
 ```
 
-Runs all 6 gates:
-1. 🔒 **Ownership** (75%+ required) - Explain your code
-2. 🛡️ **Security** (75%+ required) - No vulnerabilities
-3. ⚠️ **Errors** - Proper error handling
-4. ⚡ **Performance** - Scales well
-5. 📖 **Fundamentals** - Clean code
-6. 🧪 **Testing** - Test coverage
+Pass 6 quality gates. Gates 1 & 2 require 75%+ to proceed.
 
-If you fail Gate 1 or 2, you retry until you understand.
-
-### Step 5: Track Your Learning
+### Step 5: Track Learning
 
 ```
 /openlearn-retro    # Save what you learned
-/openlearn-advise   # Get advice from past learnings
-/openlearn-status   # See your progress
-```
-
-All learnings saved to SQLite database + markdown files.
-
-## Example Workflow
-
-```bash
-# 1. Install OpenLearn
-curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
-
-# 2. Go to your project
-cd my-todo-app
-
-# 3. Start opencode
-opencode
-
-# 4. Initialize
-/openlearn-init
-# → Answer questions about your project
-
-# 5. Plan first feature
-/openlearn-feature
-# → Creates spec for "add todo" feature
-
-# 6. Build it yourself
-# Write code, use /openlearn-guide when stuck
-
-# 7. Complete
-/openlearn-done
-# → Pass 6 gates, explain your code
-
-# 8. Reflect
-/openlearn-retro
-# → Save learnings to database
+/openlearn-advise   # Query past learnings
+/openlearn-status   # Check progress
 ```
 
 ## The 6 Gates
-
-Before shipping, your code must pass:
 
 | Gate | Name | Blocking | Purpose |
 |------|------|----------|---------|
@@ -154,58 +85,19 @@ Before shipping, your code must pass:
 
 | Command | Purpose |
 |---------|---------|
-| `/openlearn-init` | Initialize project with mission and roadmap |
-| `/openlearn-feature` | Plan a feature with specs |
-| `/openlearn-guide` | Get Socratic guidance while coding |
-| `/openlearn-stuck` | Debug systematically (Protocol D) |
-| `/openlearn-done` | Complete task with 6 Gates |
-| `/openlearn-retro` | Save what you learned to SQLite |
-| `/openlearn-advise` | Query past learnings from database |
-| `/openlearn-status` | Show progress and statistics |
-| `/openlearn-test` | Test writing guidance |
-| `/openlearn-docs` | Documentation help |
-| `/openlearn-profile` | View/change settings |
+| `/openlearn-init` | Initialize project |
+| `/openlearn-feature` | Plan feature |
+| `/openlearn-guide` | Socratic guidance |
+| `/openlearn-stuck` | Debug systematically |
+| `/openlearn-done` | Complete with gates |
+| `/openlearn-retro` | Capture learnings |
+| `/openlearn-advise` | Query past learnings |
+| `/openlearn-status` | Check progress |
 
-## Learning System
+## Inspiration
 
-OpenLearn tracks your learning journey:
+Inspired by [OwnYourCode](https://github.com/DanielPodolsky/ownyourcode) by Daniel Podolsky.
 
-- **SQLite Database**: `.opencode/openlearn/openlearn.db`
-- **Markdown Files**: `.opencode/openlearn/learnings/`
-- **Topics Tracked**: Technologies you encounter (React, TypeScript, etc.)
-- **Gate Scores**: Ownership and security scores saved
+## License
 
-Query anytime:
-```
-/openlearn-advise
-→ "When you worked on [similar task], you learned..."
-```
-
-## Context7
-
-OpenLearn uses official docs (via Context7) so you learn to read documentation, not rely on AI hallucinations.
-
-## Project Structure
-
-```
-.opencode/
-├── openlearn/
-│   ├── config.json          # User settings
-│   ├── openlearn.db         # SQLite database
-│   ├── product/
-│   │   ├── mission.md       # Project mission
-│   │   ├── stack.md         # Tech stack
-│   │   └── roadmap.md       # Development roadmap
-│   ├── specs/active/        # Current feature specs
-│   └── learnings/           # Captured learnings
-├── commands/                # Slash commands
-│   └── openlearn-*.md
-└── agents/                  # Gate agents
-    ├── mentor.md
-    ├── ownership-gate.md
-    ├── security-gate.md
-    ├── error-gate.md
-    ├── performance-gate.md
-    ├── fundamentals-gate.md
-    └── testing-gate.md
-```
+MIT
