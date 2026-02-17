@@ -3,9 +3,8 @@
 # OpenLearn
 > AI-менторство разработки для opencode. Ты пишешь код, мы направляем мышление.
 
-[![Built for opencode](https://img.shields.io/badge/Built%20for-opencode-6366f1?style=flat)](https://opencode.ai)
 [![Tests](https://github.com/menshikow/openlearn/workflows/Tests/badge.svg)](https://github.com/menshikow/openlearn/actions)
-[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh)
+[![Built for opencode](https://img.shields.io/badge/Built%20for-opencode-6366f1?style=flat)](https://opencode.ai)
 
 [English](README.md) | [Deutsch](README.de.md) | [Русский](README.ru.md)
 
