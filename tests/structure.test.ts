@@ -4,7 +4,10 @@ import * as path from 'path';
 import { glob } from 'glob';
 
 describe('Project Structure', () => {
-  const rootDir = path.resolve(__dirname, '..');
+  // Use CI-aware path resolution
+  const rootDir = process.env.CI 
+    ? path.resolve(process.cwd()) 
+    : path.resolve(__dirname, '..');
 
   test('required directories exist', () => {
     const requiredDirs = [

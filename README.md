@@ -1,4 +1,12 @@
-# OpenLearn
+![OpenLearn Cover](assets/cover.png)
+
+# OpenLearn - AI-Mentored Development Framework
+
+[![Tests](https://github.com/menshikow/openlearn/workflows/Tests/badge.svg)](https://github.com/menshikow/openlearn/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-333333?style=flat)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![GitHub stars](https://img.shields.io/github/stars/menshikow/openlearn?style=flat&color=333333)](https://github.com/menshikow/openlearn/stargazers)
+[![Built for opencode](https://img.shields.io/badge/Built%20for-opencode-6366f1?style=flat)](https://opencode.ai)
 
 > Stop generating code. Start understanding it.
 

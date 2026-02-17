@@ -1,0 +1,3 @@
+[coverage]
+reporter = ["text", "lcov"]
+directory = "coverage"
