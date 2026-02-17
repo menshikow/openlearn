@@ -1,4 +1,4 @@
-![OpenLearn Cover](assets/cover.jpg)
+![OpenLearn Cover](assets/readme.jpg)
 
 # OpenLearn
 > AI-mentored development for opencode. You write the code, we guide the thinking.
