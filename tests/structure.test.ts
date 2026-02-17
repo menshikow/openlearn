@@ -39,8 +39,20 @@ describe('Project Structure', () => {
 
     requiredDirs.forEach(dir => {
       const fullPath = path.join(rootDir, dir);
-      expect(fs.existsSync(fullPath)).toBe(true);
-      expect(fs.statSync(fullPath).isDirectory()).toBe(true);
+      const exists = fs.existsSync(fullPath);
+      const isDir = exists ? fs.statSync(fullPath).isDirectory() : false;
+      
+      // Debug logging for CI
+      if (!exists || !isDir) {
+        console.error(`Directory check failed: ${dir}`);
+        console.error(`  rootDir: ${rootDir}`);
+        console.error(`  fullPath: ${fullPath}`);
+        console.error(`  exists: ${exists}`);
+        console.error(`  isDir: ${isDir}`);
+      }
+      
+      expect(exists).toBe(true);
+      expect(isDir).toBe(true);
     });
   });
 
