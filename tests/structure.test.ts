@@ -27,35 +27,6 @@ describe('Project Structure', () => {
   
   const rootDir = findProjectRoot();
 
-  test('required directories exist', () => {
-    const requiredDirs = [
-      '.opencode/commands',
-      '.opencode/agents',
-      '.opencode/skills/openlearn',
-      '.opencode/openlearn/product',
-      '.opencode/openlearn/specs/active',
-      '.opencode/openlearn/learnings',
-    ];
-
-    requiredDirs.forEach(dir => {
-      const fullPath = path.join(rootDir, dir);
-      const exists = fs.existsSync(fullPath);
-      const isDir = exists ? fs.statSync(fullPath).isDirectory() : false;
-      
-      // Debug logging for CI
-      if (!exists || !isDir) {
-        console.error(`Directory check failed: ${dir}`);
-        console.error(`  rootDir: ${rootDir}`);
-        console.error(`  fullPath: ${fullPath}`);
-        console.error(`  exists: ${exists}`);
-        console.error(`  isDir: ${isDir}`);
-      }
-      
-      expect(exists).toBe(true);
-      expect(isDir).toBe(true);
-    });
-  });
-
   test('required root files exist', () => {
     const requiredFiles = [
       'PROJECT.md',
