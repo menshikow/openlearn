@@ -3,10 +3,11 @@
 # OpenLearn
 > AI-mentorierte Entwicklung für opencode. Du schreibst den Code, wir leiten das Denken.
 
-[![Tests](https://github.com/menshikow/openlearn/workflows/Tests/badge.svg)](https://github.com/menshikow/openlearn/actions)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![GitHub stars](https://img.shields.io/github/stars/menshikow/openlearn?style=flat&color=333333)](https://github.com/menshikow/openlearn/stargazers)
 [![Built for opencode](https://img.shields.io/badge/Built%20for-opencode-6366f1?style=flat)](https://opencode.ai)
+[![Tests](https://github.com/menshikow/openlearn/workflows/Tests/badge.svg)](https://github.com/menshikow/openlearn/actions)
+[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh)
+
+[English](README.md) | [Deutsch](README.de.md) | [Русский](README.ru.md)
 
 ## Was ist das?
 
@@ -59,5 +60,3 @@ Vor dem Release muss der Code bestehen:
 ## Context7
 
 OpenLearn verwendet offizielle Dokumentation (via Context7), damit du lernst, Dokumentation zu lesen, statt auf KI-Halluzinationen zu vertrauen.
-
-[English](README.md) | [Русский](README.ru.md)

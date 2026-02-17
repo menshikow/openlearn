@@ -3,10 +3,11 @@
 # OpenLearn
 > AI-менторство разработки для opencode. Ты пишешь код, мы направляем мышление.
 
-[![Tests](https://github.com/menshikow/openlearn/workflows/Tests/badge.svg)](https://github.com/menshikow/openlearn/actions)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![GitHub stars](https://img.shields.io/github/stars/menshikow/openlearn?style=flat&color=333333)](https://github.com/menshikow/openlearn/stargazers)
 [![Built for opencode](https://img.shields.io/badge/Built%20for-opencode-6366f1?style=flat)](https://opencode.ai)
+[![Tests](https://github.com/menshikow/openlearn/workflows/Tests/badge.svg)](https://github.com/menshikow/openlearn/actions)
+[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh)
+
+[English](README.md) | [Deutsch](README.de.md) | [Русский](README.ru.md)
 
 ## Что это?
 
@@ -59,5 +60,3 @@ cp -r openlearn/.opencode/ ./твой-проект/
 ## Context7
 
 OpenLearn использует официальную документацию (через Context7), чтобы ты учился читать документацию, а не полагаться на галлюцинации ИИ.
-
-[English](README.md) | [Deutsch](README.de.md)
