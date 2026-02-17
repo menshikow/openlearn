@@ -113,20 +113,21 @@ export interface Topic {
 export function recordTopic(name: string): void {
   const db = getDatabase();
   const now = new Date().toISOString();
+  const lowerName = name.toLowerCase();
 
   const existing = db
-    .query("SELECT * FROM topics WHERE name = $name")
-    .get({ $name: name.toLowerCase() }) as Topic | null;
+    .query<Topic, [string]>("SELECT * FROM topics WHERE name = ?")
+    .get(lowerName);
 
   if (existing) {
     db.run(
-      "UPDATE topics SET count = count + 1, last_encountered = $now WHERE name = $name",
-      { $name: name.toLowerCase(), $now: now }
+      "UPDATE topics SET count = count + 1, last_encountered = ? WHERE name = ?",
+      [now, lowerName]
     );
   } else {
     db.run(
-      "INSERT INTO topics (name, first_encountered, last_encountered, count) VALUES ($name, $now, $now, 1)",
-      { $name: name.toLowerCase(), $now: now }
+      "INSERT INTO topics (name, first_encountered, last_encountered, count) VALUES (?, ?, ?, 1)",
+      [lowerName, now, now]
     );
   }
 }
@@ -137,8 +138,8 @@ export function recordTopic(name: string): void {
 export function getTopics(): Topic[] {
   const db = getDatabase();
   return db
-    .query("SELECT * FROM topics ORDER BY count DESC, last_encountered DESC")
-    .all() as Topic[];
+    .query<Topic, []>("SELECT * FROM topics ORDER BY count DESC, last_encountered DESC")
+    .all();
 }
 
 /**
@@ -150,8 +151,8 @@ export function getRecentTopics(days: number = 30): Topic[] {
   cutoff.setDate(cutoff.getDate() - days);
 
   return db
-    .query("SELECT * FROM topics WHERE last_encountered > $cutoff ORDER BY last_encountered DESC")
-    .all({ $cutoff: cutoff.toISOString() }) as Topic[];
+    .query<Topic, [string]>("SELECT * FROM topics WHERE last_encountered > ? ORDER BY last_encountered DESC")
+    .all(cutoff.toISOString());
 }
 
 // ============================================================================
@@ -176,14 +177,14 @@ export function saveLearning(learning: Omit<Learning, "id" | "created_at">): num
 
   const result = db.run(
     `INSERT INTO learnings (timestamp, task, topic, what_learned, mistakes)
-     VALUES ($timestamp, $task, $topic, $what_learned, $mistakes)`,
-    {
-      $timestamp: learning.timestamp,
-      $task: learning.task,
-      $topic: learning.topic || null,
-      $what_learned: learning.what_learned,
-      $mistakes: learning.mistakes || null,
-    }
+     VALUES (?, ?, ?, ?, ?)`,
+    [
+      learning.timestamp,
+      learning.task,
+      learning.topic || null,
+      learning.what_learned,
+      learning.mistakes || null,
+    ]
   );
 
   // Also record the topic if provided
@@ -200,8 +201,8 @@ export function saveLearning(learning: Omit<Learning, "id" | "created_at">): num
 export function getLearnings(limit: number = 100): Learning[] {
   const db = getDatabase();
   return db
-    .query("SELECT * FROM learnings ORDER BY timestamp DESC LIMIT $limit")
-    .all({ $limit: limit }) as Learning[];
+    .query<Learning, [number]>("SELECT * FROM learnings ORDER BY timestamp DESC LIMIT ?")
+    .all(limit);
 }
 
 /**
@@ -212,14 +213,14 @@ export function searchLearnings(query: string): Learning[] {
   const searchTerm = `%${query.toLowerCase()}%`;
 
   return db
-    .query(
+    .query<Learning, [string, string, string]>(
       `SELECT * FROM learnings 
-       WHERE LOWER(topic) LIKE $query 
-          OR LOWER(task) LIKE $query 
-          OR LOWER(what_learned) LIKE $query 
+       WHERE LOWER(topic) LIKE ? 
+          OR LOWER(task) LIKE ? 
+          OR LOWER(what_learned) LIKE ? 
        ORDER BY timestamp DESC`
     )
-    .all({ $query: searchTerm }) as Learning[];
+    .all(searchTerm, searchTerm, searchTerm);
 }
 
 /**
@@ -228,8 +229,8 @@ export function searchLearnings(query: string): Learning[] {
 export function getLearningsByTopic(topic: string): Learning[] {
   const db = getDatabase();
   return db
-    .query("SELECT * FROM learnings WHERE LOWER(topic) = $topic ORDER BY timestamp DESC")
-    .all({ $topic: topic.toLowerCase() }) as Learning[];
+    .query<Learning, [string]>("SELECT * FROM learnings WHERE LOWER(topic) = ? ORDER BY timestamp DESC")
+    .all(topic.toLowerCase());
 }
 
 /**
@@ -241,8 +242,8 @@ export function getRecentLearnings(days: number = 30): Learning[] {
   cutoff.setDate(cutoff.getDate() - days);
 
   return db
-    .query("SELECT * FROM learnings WHERE timestamp > $cutoff ORDER BY timestamp DESC")
-    .all({ $cutoff: cutoff.toISOString() }) as Learning[];
+    .query<Learning, [string]>("SELECT * FROM learnings WHERE timestamp > ? ORDER BY timestamp DESC")
+    .all(cutoff.toISOString());
 }
 
 // ============================================================================
@@ -263,8 +264,8 @@ export interface Objective {
 export function addObjective(objective: string): number {
   const db = getDatabase();
   const result = db.run(
-    "INSERT INTO objectives (objective, status) VALUES ($objective, 'active')",
-    { $objective: objective }
+    "INSERT INTO objectives (objective, status) VALUES (?, 'active')",
+    [objective]
   );
   return result.lastInsertRowid as number;
 }
@@ -275,8 +276,8 @@ export function addObjective(objective: string): number {
 export function getActiveObjectives(): Objective[] {
   const db = getDatabase();
   return db
-    .query("SELECT * FROM objectives WHERE status = 'active' ORDER BY created_at DESC")
-    .all() as Objective[];
+    .query<Objective, []>("SELECT * FROM objectives WHERE status = 'active' ORDER BY created_at DESC")
+    .all();
 }
 
 /**
@@ -285,8 +286,8 @@ export function getActiveObjectives(): Objective[] {
 export function completeObjective(id: number): void {
   const db = getDatabase();
   db.run(
-    "UPDATE objectives SET status = 'completed', completed_at = $now WHERE id = $id",
-    { $id: id, $now: new Date().toISOString() }
+    "UPDATE objectives SET status = 'completed', completed_at = ? WHERE id = ?",
+    [new Date().toISOString(), id]
   );
 }
 
@@ -311,18 +312,17 @@ export function getLearningStats(): LearningStats {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const totalLearnings = (db.query("SELECT COUNT(*) as count FROM learnings").get() as { count: number }).count;
-  const totalTopics = (db.query("SELECT COUNT(*) as count FROM topics").get() as { count: number }).count;
-  const recentLearnings = (db.query(
-    "SELECT COUNT(*) as count FROM learnings WHERE timestamp > $cutoff",
-    { $cutoff: thirtyDaysAgo.toISOString() }
-  ).get() as { count: number }).count;
-  const activeObjectives = (db.query(
+  const totalLearnings = (db.query<{ count: number }, []>("SELECT COUNT(*) as count FROM learnings").get() as { count: number }).count;
+  const totalTopics = (db.query<{ count: number }, []>("SELECT COUNT(*) as count FROM topics").get() as { count: number }).count;
+  const recentLearnings = (db.query<{ count: number }, [string]>(
+    "SELECT COUNT(*) as count FROM learnings WHERE timestamp > ?"
+  ).get(thirtyDaysAgo.toISOString()) as { count: number }).count;
+  const activeObjectives = (db.query<{ count: number }, []>(
     "SELECT COUNT(*) as count FROM objectives WHERE status = 'active'"
   ).get() as { count: number }).count;
-  const topTopics = db.query(
+  const topTopics = db.query<{ name: string; count: number }, []>(
     "SELECT name, count FROM topics ORDER BY count DESC LIMIT 5"
-  ).all() as { name: string; count: number }[];
+  ).all();
 
   return {
     totalLearnings,
@@ -354,14 +354,14 @@ export function recordGateResult(result: Omit<GateResult, "id" | "timestamp">): 
   const db = getDatabase();
   db.run(
     `INSERT INTO gate_results (task_name, gate_name, score, passed, feedback)
-     VALUES ($task, $gate, $score, $passed, $feedback)`,
-    {
-      $task: result.task_name,
-      $gate: result.gate_name,
-      $score: result.score,
-      $passed: result.passed ? 1 : 0,
-      $feedback: result.feedback || null,
-    }
+     VALUES (?, ?, ?, ?, ?)`,
+    [
+      result.task_name,
+      result.gate_name,
+      result.score,
+      result.passed ? 1 : 0,
+      result.feedback || null,
+    ]
   );
 }
 
@@ -375,18 +375,22 @@ export function getGateStats(): {
 } {
   const db = getDatabase();
 
-  const stats = db.query(
+  const stats = db.query<{
+    total: number;
+    passed: number;
+    avg_score: number | null;
+  }, []>(
     `SELECT 
       COUNT(*) as total,
       SUM(CASE WHEN passed = 1 THEN 1 ELSE 0 END) as passed,
       AVG(score) as avg_score
      FROM gate_results`
-  ).get() as { total: number; passed: number; avg_score: number | null };
+  ).get();
 
   return {
-    totalGates: stats.total,
-    passedGates: stats.passed,
-    averageScore: stats.avg_score ? Math.round(stats.avg_score) : 0,
+    totalGates: stats?.total || 0,
+    passedGates: stats?.passed || 0,
+    averageScore: stats?.avg_score ? Math.round(stats.avg_score) : 0,
   };
 }
 
