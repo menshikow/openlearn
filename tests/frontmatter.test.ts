@@ -5,7 +5,23 @@ import { glob } from 'glob';
 import matter from 'gray-matter';
 
 describe('Frontmatter Validation', () => {
-  const rootDir = path.resolve(__dirname, '..');
+  // Try multiple strategies to find project root
+  function findProjectRoot(): string {
+    let currentDir = __dirname;
+    while (currentDir !== path.parse(currentDir).root) {
+      if (fs.existsSync(path.join(currentDir, 'package.json')) &&
+          fs.existsSync(path.join(currentDir, '.opencode'))) {
+        return currentDir;
+      }
+      currentDir = path.dirname(currentDir);
+    }
+    if (fs.existsSync(path.join(process.cwd(), 'package.json'))) {
+      return process.cwd();
+    }
+    return path.resolve(__dirname, '..');
+  }
+  
+  const rootDir = findProjectRoot();
 
   async function getAllMarkdownFiles(): Promise<string[]> {
     const commandsDir = path.join(rootDir, '.opencode/commands');

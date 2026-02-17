@@ -4,10 +4,28 @@ import * as path from 'path';
 import { glob } from 'glob';
 
 describe('Project Structure', () => {
-  // Use CI-aware path resolution
-  const rootDir = process.env.CI 
-    ? path.resolve(process.cwd()) 
-    : path.resolve(__dirname, '..');
+  // Try multiple strategies to find project root
+  function findProjectRoot(): string {
+    // Strategy 1: Start from current file and go up
+    let currentDir = __dirname;
+    while (currentDir !== path.parse(currentDir).root) {
+      if (fs.existsSync(path.join(currentDir, 'package.json')) &&
+          fs.existsSync(path.join(currentDir, '.opencode'))) {
+        return currentDir;
+      }
+      currentDir = path.dirname(currentDir);
+    }
+    
+    // Strategy 2: Use process.cwd() as fallback
+    if (fs.existsSync(path.join(process.cwd(), 'package.json'))) {
+      return process.cwd();
+    }
+    
+    // Strategy 3: Use __dirname parent
+    return path.resolve(__dirname, '..');
+  }
+  
+  const rootDir = findProjectRoot();
 
   test('required directories exist', () => {
     const requiredDirs = [
