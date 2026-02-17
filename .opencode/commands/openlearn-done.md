@@ -25,15 +25,32 @@ Complete a task and run all 6 Gates for quality verification.
 
 3. **Run 6 Gates sequentially**
 
+   Use `task` tool to invoke each gate agent:
+   
+   ```
+   task(description="Run ownership gate", prompt="@ownership-gate", subagent_type="general")
+   ```
+
    ### Gate 1: @ownership-gate (BLOCKING)
    - Verify student understands their code
    - Score 0-100, must be ≥75%
-   - If failed: Provide study resources, ask different question, retry
+   - If failed: 
+     1. Show score and what needs improvement
+     2. Provide study resources
+     3. Ask: "Ready to retry with a different question?"
+     4. Re-invoke gate with new question
+     5. Repeat until passed or student gives up
    
    ### Gate 2: @security-gate (BLOCKING)
    - Review for security issues
    - Score 0-100, must be ≥75%
-   - If failed: Explain vulnerabilities, provide resources, retry
+   - If failed:
+     1. Show score and critical issues
+     2. Explain security risks
+     3. Provide secure coding resources
+     4. Ask: "Have you fixed the issues?"
+     5. Re-invoke gate for re-review
+     6. Repeat until passed or student gives up
    
    ### Gate 3: @error-gate
    - Check error handling
@@ -62,6 +79,37 @@ Complete a task and run all 6 Gates for quality verification.
 6. **Show completion summary**
    - ✅ All gates passed OR
    - 🔴 Blocking gates failed - fix and retry
+
+## Implementation Notes
+
+When invoking gates, pass the relevant file paths and context:
+
+```
+task(
+  description="Run ownership gate",
+  prompt="""
+  @ownership-gate
+  
+  Files to review:
+  - /path/to/file1.js
+  - /path/to/file2.js
+  
+  Task: [task description]
+  """,
+  subagent_type="general"
+)
+```
+
+For blocking gates that fail, implement retry logic:
+
+```
+while gate_score < 75:
+  ask if ready to retry
+  if yes:
+    re-invoke gate
+  else:
+    break and report failure
+```
 
 ## Example Session
 
