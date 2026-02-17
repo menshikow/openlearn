@@ -1,4 +1,4 @@
-![OpenLearn Cover](assets/cover.png)
+![OpenLearn Cover](assets/cover.jpg)
 
 # OpenLearn - AI-Mentored Development Framework
 
