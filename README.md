@@ -16,7 +16,10 @@ OpenLearn transforms opencode from a code generator into a teaching mentor. You 
 ## Installation
 
 ```bash
-# Copy OpenLearn to your project
+# One-liner install (macOS/Linux)
+curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
+
+# Or manually copy OpenLearn to your project
 git clone https://github.com/menshikow/openlearn.git
 cp -r openlearn/.opencode/ ./your-project/
 
@@ -54,9 +57,37 @@ Before shipping, your code must pass:
 | `/openlearn-stuck` | Debug with Protocol D |
 | `/openlearn-done` | Complete with gates |
 | `/openlearn-test` | Test guidance |
+| `/openlearn-docs` | Documentation help |
 | `/openlearn-retro` | Capture learnings |
 | `/openlearn-status` | Check progress |
+| `/openlearn-profile` | View/change settings |
+| `/openlearn-advise` | Query past learnings |
 
 ## Context7
 
 OpenLearn uses official docs (via Context7) so you learn to read documentation, not rely on AI hallucinations.
+
+## Project Structure
+
+```
+.opencode/
+├── openlearn/
+│   ├── config.json          # User settings
+│   ├── openlearn.db         # SQLite database
+│   ├── product/
+│   │   ├── mission.md       # Project mission
+│   │   ├── stack.md         # Tech stack
+│   │   └── roadmap.md       # Development roadmap
+│   ├── specs/active/        # Current feature specs
+│   └── learnings/           # Captured learnings
+├── commands/                # Slash commands
+│   └── openlearn-*.md
+└── agents/                  # Gate agents
+    ├── mentor.md
+    ├── ownership-gate.md
+    ├── security-gate.md
+    ├── error-gate.md
+    ├── performance-gate.md
+    ├── fundamentals-gate.md
+    └── testing-gate.md
+```

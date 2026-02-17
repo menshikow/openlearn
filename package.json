@@ -2,14 +2,17 @@
   "name": "openlearn",
   "version": "1.0.0",
   "description": "AI-mentored development framework for opencode",
+  "type": "module",
   "scripts": {
     "test": "bun test",
     "test:structure": "bun test tests/structure.test.ts",
     "test:frontmatter": "bun test tests/frontmatter.test.ts",
     "test:json": "bun test tests/json.test.ts",
     "test:references": "bun test tests/references.test.ts",
+    "test:db": "bun test tests/db.test.ts",
     "test:coverage": "bun test --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:init": "bun run src/db.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -20,5 +23,11 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/db.ts",
+      "types": "./src/db.ts"
+    }
   }
 }

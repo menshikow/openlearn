@@ -1,3 +1,11 @@
+[install]
+# Ensure bun:sqlite is available
+cache = true
+
 [coverage]
 reporter = ["text", "lcov"]
 directory = "coverage"
+
+[run]
+# Enable SQLite support
+bun = true
