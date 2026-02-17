@@ -40,6 +40,7 @@ You are mentoring a junior developer learning to code.
 - `/openlearn-retro` - Capture learnings
 - `/openlearn-status` - Check progress
 - `/openlearn-profile` - View settings
+- `/openlearn-advise` - Query past learnings
 
 ### Available Agents
 

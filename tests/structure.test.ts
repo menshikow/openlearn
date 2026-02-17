@@ -59,7 +59,7 @@ describe('Project Structure', () => {
 
     agentFiles.forEach(file => {
       const isMentor = file === 'mentor.md';
-      const isGate = file.match(/^[a-z-]+-gate\.md$/);
+      const isGate = /^[a-z-]+-gate\.md$/.test(file);
       expect(isMentor || isGate).toBe(true);
     });
   });
