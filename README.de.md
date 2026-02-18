@@ -14,17 +14,34 @@ OpenLearn verwandelt opencode von einem Code-Generator in einen Lehrmentor. Du s
 
 ## Installation
 
+### Schnellinstallation (macOS/Linux)
+
+Ein Befehl, der überall funktioniert. Erkennt automatisch deinen Package Manager (bun → npm → pnpm):
+
 ```bash
-# macOS/Linux
 curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
+```
 
-# Windows (PowerShell)
+### Windows (PowerShell)
+
+```powershell
 iwr -useb https://raw.githubusercontent.com/menshikow/openlearn/main/install.ps1 | iex
+```
 
-# Oder manuell
+### Manuelle Installation
+
+```bash
 git clone https://github.com/menshikow/openlearn.git
 cp -r openlearn/.opencode/ ./dein-projekt/
 ```
+
+### Globales Profil
+
+Während der Installation wirst du gefragt, ob du ein **globales Profil** erstellen möchtest unter:
+- macOS: `~/Library/Application Support/openlearn/profile.json`
+- Linux: `~/.config/openlearn/profile.json`
+
+Globale Profile ermöglichen die Wiederverwendung von Einstellungen in allen Projekten.
 
 ## Verwendung
 
@@ -34,24 +51,38 @@ cp -r openlearn/.opencode/ ./dein-projekt/
 /openlearn-init
 ```
 
-Richtet dein Projekt ein mit Mission, Stack und Roadmap.
+Richtet dein Projekt ein mit:
+- Benutzerprofil (global oder lokal)
+- Projektmission, Stack und Roadmap
+- Context7 MCP-Konfiguration
+- Theory/Build Modus-Auswahl
 
-### Schritt 2: Feature planen
+**Neu**: Erkennt automatisch globale Profile und bietet deren Wiederverwendung an.
+
+### Schritt 2: Task planen
 
 ```
-/openlearn-feature
+/openlearn-task
 ```
 
 Erstellt Spec-Dateien mit Akzeptanzkriterien und Aufgaben.
 
+**Hinweis**: Umbenannt von `/openlearn-feature` für allgemeinere Terminologie.
+
 ### Schritt 3: Bauen
 
 ```
-/openlearn-guide    # Sokratische Anleitung
+/openlearn-guide    # Sokratische Anleitung (Theory Mode)
 /openlearn-stuck    # Debug mit Protokoll D
 ```
 
-Du schreibst ALLEN Code. OpenLearn stellt Patterns (max 8 Zeilen) und Anleitung bereit.
+**Theory Mode** (Standard): Du schreibst ALLEN Code. OpenLearn bietet:
+- Erklärungen und Anleitung
+- Patterns (max **5 Zeilen** Beispielcode)
+- **Nie** Dateien ohne Erlaubnis erstellen
+- **Nie** Befehle ohne Nachfrage ausführen
+
+**Build Mode**: Wird ausgelöst wenn du sagst "erstelle", "implementiere" oder `/openlearn-*` Befehle nutzt. Erfordert trotzdem Erlaubnis für jede Aktion.
 
 ### Schritt 4: Abschließen
 
@@ -59,7 +90,9 @@ Du schreibst ALLEN Code. OpenLearn stellt Patterns (max 8 Zeilen) und Anleitung 
 /openlearn-done
 ```
 
-Bestahe 6 Qualitäts-Gatter. Gatter 1 & 2 erfordern 75%+ zum Fortfahren.
+Bestehe 6 Qualitäts-Gatter:
+- Gatter 1 & 2 erfordern 75%+ zum Fortfahren
+- Bereinigt automatisch temporäre Dateien (AGENTS.md, PROJECT.md) aus dem Root-Verzeichnis
 
 ### Schritt 5: Lernen verfolgen
 
@@ -67,6 +100,13 @@ Bestahe 6 Qualitäts-Gatter. Gatter 1 & 2 erfordern 75%+ zum Fortfahren.
 /openlearn-retro    # Speichere was du gelernt hast
 /openlearn-advise   # Abfrage vergangener Lektionen
 /openlearn-status   # Prüfe Fortschritt
+```
+
+### Zusätzliche Befehle
+
+```
+/openlearn-setup-context7   # Context7 MCP konfigurieren
+/openlearn-profile          # Einstellungen anzeigen/ändern
 ```
 
 ## Die 6 Gatter
@@ -84,14 +124,44 @@ Bestahe 6 Qualitäts-Gatter. Gatter 1 & 2 erfordern 75%+ zum Fortfahren.
 
 | Befehl | Zweck |
 |--------|-------|
-| `/openlearn-init` | Projekt initialisieren |
-| `/openlearn-feature` | Feature planen |
-| `/openlearn-guide` | Sokratische Anleitung |
-| `/openlearn-stuck` | Systematisches Debuggen |
-| `/openlearn-done` | Mit Gattern abschließen |
+| `/openlearn-init` | Projekt mit globalem Profil-Support initialisieren |
+| `/openlearn-task` | Task mit Spec-Driven Development planen |
+| `/openlearn-guide` | Sokratische Anleitung (Theory Mode) |
+| `/openlearn-stuck` | Systematisches Debuggen (Protokoll D) |
+| `/openlearn-done` | Mit 6 Gattern + Auto-Cleanup abschließen |
+| `/openlearn-test` | Test-Anleitung |
+| `/openlearn-docs` | Dokumentationshilfe |
 | `/openlearn-retro` | Lektionen speichern |
 | `/openlearn-advise` | Vergangene Lektionen abfragen |
 | `/openlearn-status` | Fortschritt prüfen |
+| `/openlearn-profile` | Einstellungen anzeigen/ändern |
+| `/openlearn-setup-context7` | Context7 MCP konfigurieren |
+
+## Was ist neu
+
+### Globales Profil
+Erstelle ein globales Profil einmal, nutze es überall. Keine wiederholten Profil-Fragen bei jedem Projekt.
+
+### Theory Mode vs Build Mode
+- **Theory Mode** (Standard): Reine Anleitung, keine Dateierstellung
+- **Build Mode**: Explizite Erlaubnis für jede Aktion erforderlich
+
+### Strikte Berechtigungen
+- Maximal **5 Zeilen** Beispielcode (reduziert von 8)
+- **Immer** fragen vor Dateierstellung oder Befehlsausführung
+- Nie proaktiv - immer "Soll ich...?" fragen
+
+### Context7 MCP Setup
+Eingebauter Befehl zur Auto-Konfiguration von Context7 für offizielle Dokumentationen.
+
+### Universeller Installer
+Ein einziger `curl | bash` Befehl erkennt und nutzt automatisch deinen Package Manager.
+
+### Automatische Bereinigung
+Temporäre Dateien (AGENTS.md, PROJECT.md) werden bei `/openlearn-done` automatisch aus dem Root-Verzeichnis bereinigt.
+
+### Umbenannte Befehle
+- `/openlearn-feature` → `/openlearn-task` (allgemeinere Terminologie)
 
 ## Inspiration
 
