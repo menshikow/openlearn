@@ -70,3 +70,11 @@ notes.md
 # OpenLearn specific (keep these)
 # .opencode/openlearn/config.json - Keep in repo for shared settings
 # .opencode/openlearn/learnings/ - Keep learnings in repo
+
+# OpenLearn temporary files (may be copied to root during development)
+AGENTS.md
+PROJECT.md
+
+# OpenLearn database WAL files
+.opencode/openlearn/*.db-shm
+.opencode/openlearn/*.db-wal
