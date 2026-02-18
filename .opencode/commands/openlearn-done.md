@@ -7,19 +7,28 @@ agent: mentor
 
 Complete a task and run all 6 Gates for quality verification.
 
+## Important: Permission Required
+
+Before running git commands or updating files:
+1. Explain what commands will run
+2. Ask: "Should I proceed?"
+3. Only continue with explicit confirmation
+
 ## Flow
 
 1. **Identify completed work**
    - Ask: "What are you completing?"
      - Task from spec
      - Bug fix
-     - Feature
+     - Task
      - Refactor
    - Read relevant spec if from active spec
 
-2. **Gather changes**
-   - Run `git log --oneline -5`
-   - Run `git diff --name-only HEAD~1` or `git status`
+2. **Gather changes** (with permission)
+   - Ask: "I'll check git history. Should I run git commands?"
+   - If yes:
+     - Run `git log --oneline -5`
+     - Run `git diff --name-only HEAD~1` or `git status`
    - Ask: "What are the key files to review?"
    - Read the key files
 
@@ -73,10 +82,17 @@ Complete a task and run all 6 Gates for quality verification.
    - Highlight any blocking failures
    - List non-blocking recommendations
 
-5. **Update spec**
-   - If from active spec, mark task complete in tasks.md
+5. **Update spec** (with permission)
+   - Ask: "Should I mark the task complete in tasks.md?"
+   - If yes: Update tasks.md to mark task complete
 
-6. **Show completion summary**
+6. **Cleanup temporary files**
+   - Check `.opencode/openlearn/config.json` for `auto_cleanup_temp_files`
+   - If true and temporary files exist in root:
+     - Ask: "Remove temporary files (AGENTS.md, PROJECT.md) from root? [Y/n]"
+     - If yes: Remove root copies (keep in .opencode/openlearn/)
+
+7. **Show completion summary**
    - ✅ All gates passed OR
    - 🔴 Blocking gates failed - fix and retry
 
@@ -186,5 +202,5 @@ Updating spec...
 2. Refactor handleSubmit function
 3. Consider adding tests
 
-Next: Continue with next task or `/openlearn-feature` for new feature
+Next: Continue with next task or `/openlearn-task` for new task
 ```
