@@ -1,11 +1,20 @@
 ---
-description: Create feature specification using spec-driven development
+description: Create task specification using spec-driven development
 agent: mentor
 ---
 
-# /openlearn-feature
+# /openlearn-task
 
-Plan a new feature using spec-driven development.
+Plan a new task using spec-driven development.
+
+## Important: Student Writes All Code
+
+This command helps plan tasks. Before creating any spec files:
+1. Explain what files will be created
+2. Ask for permission
+3. Only proceed with explicit confirmation
+
+Maximum 5 lines of example code at a time.
 
 ## Flow
 
@@ -13,11 +22,11 @@ Plan a new feature using spec-driven development.
    - Read `.opencode/openlearn/product/roadmap.md`
    - If roadmap exists with incomplete phase:
      - Show current phase tasks
-     - Ask: "Which feature are you implementing?"
-   - If no roadmap: Ask for feature name
+     - Ask: "Which task are you implementing?"
+   - If no roadmap: Ask for task name
 
 2. **Gather requirements**
-   - Ask: "What should this feature do?"
+   - Ask: "What should this task accomplish?"
    - Ask: "Who will use it?"
    - Ask: "What does success look like?"
    - Discuss edge cases
@@ -33,32 +42,39 @@ Plan a new feature using spec-driven development.
    - "What API endpoints are required?"
    - "How will state be managed?"
 
-5. **Generate spec files**
-   - Create `.opencode/openlearn/specs/active/phase-[N]-[name]/spec.md`
-   - Create `.opencode/openlearn/specs/active/phase-[N]-[name]/design.md`
-   - Create `.opencode/openlearn/specs/active/phase-[N]-[name]/tasks.md`
+5. **File creation confirmation**
+   - Show list of files to be created:
+     - `.opencode/openlearn/specs/active/phase-[N]-[name]/spec.md`
+     - `.opencode/openlearn/specs/active/phase-[N]-[name]/design.md`
+     - `.opencode/openlearn/specs/active/phase-[N]-[name]/tasks.md`
+   - Ask: "Create these spec files? [Y/n]"
+   - If no: Explain how to create manually
 
-6. **Present for review**
+6. **Generate spec files** (with permission)
+   - Only proceed if student confirms
+   - Create all three spec files
+
+7. **Present for review**
    - Show generated specs
    - Ask for changes
    - Confirm or iterate
 
-7. **Next steps**
+8. **Next steps**
    - "Ready to implement? Use `/openlearn-guide` if you need help"
 
 ## Example Session
 
 ```
-Student: /openlearn-feature
+Student: /openlearn-task
 
 OpenLearn: Checking roadmap...
 [Reads roadmap.md]
 
 OpenLearn: You're in Phase 1: Foundation. 
-What feature are you implementing?
+What task are you implementing?
 Student: Add a todo item
 
-OpenLearn: What should this feature do?
+OpenLearn: What should this task accomplish?
 Student: Let users type a task and add it to the list
 
 OpenLearn: What does success look like?
@@ -82,11 +98,19 @@ Student: Lift state up? Pass a function down?
 
 OpenLearn: Perfect thinking! That's the React pattern.
 
---- Generating Specs ---
+--- Creating Specs ---
+
+OpenLearn: I'll create the following spec files:
+- phase-1-add-todo-item/spec.md
+- phase-1-add-todo-item/design.md
+- phase-1-add-todo-item/tasks.md
+
+Create these files? [Y/n]
+Student: Y
 
 [Creates spec files]
 
-OpenLearn: I've created your feature spec:
+OpenLearn: I've created your task spec:
 
 📄 spec.md - Requirements and acceptance criteria
 📄 design.md - Technical approach  
