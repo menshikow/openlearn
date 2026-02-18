@@ -68,10 +68,7 @@ describe('Documentation Consistency', () => {
     expect(readmeDe.toLowerCase()).toContain('theory mode');
     expect(readmeRu.toLowerCase()).toContain('theory mode');
     
-    // All should have "What's New" section
-    expect(readmeEn.toLowerCase()).toContain("what's new");
-    expect(readmeDe.toLowerCase()).toContain("was ist neu");
-    expect(readmeRu.toLowerCase()).toContain("что нового");
+
   });
 
   test('all commands have frontmatter', async () => {

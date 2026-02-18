@@ -117,32 +117,6 @@ Pass 6 quality gates:
 | 📖 | Fundamentals | No | Code quality |
 | 🧪 | Testing | No | Test coverage |
 
-## What's New
-
-### Global Profile Support
-Create a global profile once, use it everywhere. No more answering the same questions for every project.
-
-### Theory Mode vs Build Mode
-- **Theory Mode** (default): Pure guidance, no file creation
-- **Build Mode**: Explicit permission required for every action
-
-### Strict Permissions
-- Maximum **5 lines** of example code (reduced from 8)
-- **Always** asks before creating files or running commands
-- Never proactive - always asks "Should I...?"
-
-### Context7 MCP Setup
-Built-in command to auto-configure Context7 for official documentation lookups.
-
-### Bun Support
-Universal installation script that auto-detects and uses your preferred package manager (bun → npm → pnpm).
-
-### Automatic Cleanup
-Temporary files (AGENTS.md, PROJECT.md) automatically cleaned up from root on `/openlearn-done`.
-
-### Renamed Commands
-- `/openlearn-feature` → `/openlearn-task` (more general terminology)
-
 ## Commands
 
 | Command | Purpose |

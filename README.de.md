@@ -137,32 +137,6 @@ Bestehe 6 Qualitäts-Gatter:
 | `/openlearn-profile` | Einstellungen anzeigen/ändern |
 | `/openlearn-setup-context7` | Context7 MCP konfigurieren |
 
-## Was ist neu
-
-### Globales Profil
-Erstelle ein globales Profil einmal, nutze es überall. Keine wiederholten Profil-Fragen bei jedem Projekt.
-
-### Theory Mode vs Build Mode
-- **Theory Mode** (Standard): Reine Anleitung, keine Dateierstellung
-- **Build Mode**: Explizite Erlaubnis für jede Aktion erforderlich
-
-### Strikte Berechtigungen
-- Maximal **5 Zeilen** Beispielcode (reduziert von 8)
-- **Immer** fragen vor Dateierstellung oder Befehlsausführung
-- Nie proaktiv - immer "Soll ich...?" fragen
-
-### Context7 MCP Setup
-Eingebauter Befehl zur Auto-Konfiguration von Context7 für offizielle Dokumentationen.
-
-### Universeller Installer
-Ein einziger `curl | bash` Befehl erkennt und nutzt automatisch deinen Package Manager.
-
-### Automatische Bereinigung
-Temporäre Dateien (AGENTS.md, PROJECT.md) werden bei `/openlearn-done` automatisch aus dem Root-Verzeichnis bereinigt.
-
-### Umbenannte Befehle
-- `/openlearn-feature` → `/openlearn-task` (allgemeinere Terminologie)
-
 ## Inspiration
 
 Inspiriert von [OwnYourCode](https://github.com/DanielPodolsky/ownyourcode) von Daniel Podolsky.
