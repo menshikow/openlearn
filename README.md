@@ -14,9 +14,7 @@ OpenLearn transforms opencode from a code generator into a teaching mentor. You 
 
 ## Installation
 
-### Quick Install (macOS/Linux)
-
-One command that works everywhere. Auto-detects your package manager (bun → npm → pnpm):
+### macOS/Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
