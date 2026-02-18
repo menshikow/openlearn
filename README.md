@@ -14,17 +14,36 @@ OpenLearn transforms opencode from a code generator into a teaching mentor. You 
 
 ## Installation
 
+### Quick Install (macOS/Linux)
+
 ```bash
-# macOS/Linux
+# Standard installation
 curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
 
-# Windows (PowerShell)
-iwr -useb https://raw.githubusercontent.com/menshikow/openlearn/main/install.ps1 | iex
+# With bun (includes bun auto-installation if needed)
+curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install-bun.sh | bash
+```
 
-# Or manually
+### Windows (PowerShell)
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/menshikow/openlearn/main/install.ps1 | iex
+```
+
+### Manual Installation
+
+```bash
 git clone https://github.com/menshikow/openlearn.git
 cp -r openlearn/.opencode/ ./your-project/
 ```
+
+### Global Profile
+
+During installation, you'll be asked if you want to create a **global profile** at:
+- macOS: `~/Library/Application Support/openlearn/profile.json`
+- Linux: `~/.config/openlearn/profile.json`
+
+Global profiles allow you to reuse settings across all projects, skipping profile questions on subsequent installs.
 
 ## Usage
 
@@ -34,24 +53,38 @@ cp -r openlearn/.opencode/ ./your-project/
 /openlearn-init
 ```
 
-Sets up your project with mission, stack, and roadmap.
+Sets up your project with:
+- User profile (global or local)
+- Project mission, stack, and roadmap
+- Context7 MCP configuration
+- Theory/Build mode selection
 
-### Step 2: Plan Feature
+**New**: Automatically detects global profiles and offers to reuse them.
+
+### Step 2: Plan Task
 
 ```
-/openlearn-feature
+/openlearn-task
 ```
 
 Creates spec files with acceptance criteria and tasks.
 
+**Note**: Renamed from `/openlearn-feature` to be more general.
+
 ### Step 3: Build
 
 ```
-/openlearn-guide    # Get Socratic guidance
+/openlearn-guide    # Get Socratic guidance (Theory Mode)
 /openlearn-stuck    # Debug with Protocol D
 ```
 
-You write ALL code. OpenLearn provides patterns (max 8 lines) and guidance.
+**Theory Mode** (default): You write ALL code. OpenLearn provides:
+- Explanations and guidance
+- Patterns (max **5 lines** of example code)
+- **Never** creates files without permission
+- **Never** runs commands without asking
+
+**Build Mode**: Triggered when you say "create", "implement", or use `/openlearn-*` commands. Still requires permission for every action.
 
 ### Step 4: Complete
 
@@ -59,7 +92,9 @@ You write ALL code. OpenLearn provides patterns (max 8 lines) and guidance.
 /openlearn-done
 ```
 
-Pass 6 quality gates. Gates 1 & 2 require 75%+ to proceed.
+Pass 6 quality gates:
+- Gates 1 & 2 require 75%+ to proceed
+- Automatically cleans up temporary files (AGENTS.md, PROJECT.md) from root if configured
 
 ### Step 5: Track Learning
 
@@ -67,6 +102,13 @@ Pass 6 quality gates. Gates 1 & 2 require 75%+ to proceed.
 /openlearn-retro    # Save what you learned
 /openlearn-advise   # Query past learnings
 /openlearn-status   # Check progress
+```
+
+### Additional Commands
+
+```
+/openlearn-setup-context7   # Configure Context7 MCP
+/openlearn-profile          # View/change settings
 ```
 
 ## The 6 Gates
@@ -80,18 +122,48 @@ Pass 6 quality gates. Gates 1 & 2 require 75%+ to proceed.
 | 📖 | Fundamentals | No | Code quality |
 | 🧪 | Testing | No | Test coverage |
 
+## What's New
+
+### Global Profile Support
+Create a global profile once, use it everywhere. No more answering the same questions for every project.
+
+### Theory Mode vs Build Mode
+- **Theory Mode** (default): Pure guidance, no file creation
+- **Build Mode**: Explicit permission required for every action
+
+### Strict Permissions
+- Maximum **5 lines** of example code (reduced from 8)
+- **Always** asks before creating files or running commands
+- Never proactive - always asks "Should I...?"
+
+### Context7 MCP Setup
+Built-in command to auto-configure Context7 for official documentation lookups.
+
+### Bun Support
+Dedicated bun installation script with automatic bun installation if needed.
+
+### Automatic Cleanup
+Temporary files (AGENTS.md, PROJECT.md) automatically cleaned up from root on `/openlearn-done`.
+
+### Renamed Commands
+- `/openlearn-feature` → `/openlearn-task` (more general terminology)
+
 ## Commands
 
 | Command | Purpose |
 |---------|---------|
-| `/openlearn-init` | Initialize project |
-| `/openlearn-feature` | Plan feature |
-| `/openlearn-guide` | Socratic guidance |
-| `/openlearn-stuck` | Debug systematically |
-| `/openlearn-done` | Complete with gates |
+| `/openlearn-init` | Initialize project with global profile support |
+| `/openlearn-task` | Plan task with spec-driven development |
+| `/openlearn-guide` | Get Socratic guidance (Theory Mode) |
+| `/openlearn-stuck` | Debug systematically (Protocol D) |
+| `/openlearn-done` | Complete with 6 Gates + auto-cleanup |
+| `/openlearn-test` | Testing guidance |
+| `/openlearn-docs` | Documentation help |
 | `/openlearn-retro` | Capture learnings |
 | `/openlearn-advise` | Query past learnings |
 | `/openlearn-status` | Check progress |
+| `/openlearn-profile` | View/change settings |
+| `/openlearn-setup-context7` | Configure Context7 MCP |
 
 ## Inspiration
 
