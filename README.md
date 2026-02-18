@@ -16,12 +16,10 @@ OpenLearn transforms opencode from a code generator into a teaching mentor. You 
 
 ### Quick Install (macOS/Linux)
 
-```bash
-# Standard installation
-curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
+One command that works everywhere. Auto-detects your package manager (bun → npm → pnpm):
 
-# With bun (includes bun auto-installation if needed)
-curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install-bun.sh | bash
+```bash
+curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
 ```
 
 ### Windows (PowerShell)
@@ -59,7 +57,6 @@ Sets up your project with:
 - Context7 MCP configuration
 - Theory/Build mode selection
 
-**New**: Automatically detects global profiles and offers to reuse them.
 
 ### Step 2: Plan Task
 
@@ -75,7 +72,7 @@ Creates spec files with acceptance criteria and tasks.
 
 ```
 /openlearn-guide    # Get Socratic guidance (Theory Mode)
-/openlearn-stuck    # Debug with Protocol D
+/openlearn-stuck    # Debug
 ```
 
 **Theory Mode** (default): You write ALL code. OpenLearn provides:
@@ -140,7 +137,7 @@ Create a global profile once, use it everywhere. No more answering the same ques
 Built-in command to auto-configure Context7 for official documentation lookups.
 
 ### Bun Support
-Dedicated bun installation script with automatic bun installation if needed.
+Universal installation script that auto-detects and uses your preferred package manager (bun → npm → pnpm).
 
 ### Automatic Cleanup
 Temporary files (AGENTS.md, PROJECT.md) automatically cleaned up from root on `/openlearn-done`.
