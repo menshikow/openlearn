@@ -7,6 +7,14 @@ agent: mentor
 
 Get guidance on writing tests.
 
+## Important: Theory Mode
+
+This command provides testing guidance. I will:
+- Explain testing concepts and patterns
+- Guide you through test design
+- Show max 5-line examples
+- **NEVER** write tests for you - you write all tests
+
 ## Flow
 
 1. **Ask what needs testing**
@@ -20,7 +28,7 @@ Get guidance on writing tests.
 
 3. **Guide through writing tests**
    - Explain testing patterns
-   - Show small examples (max 8 lines)
+   - Show small examples (max 5 lines)
    - Student writes the actual tests
 
 4. **Review test quality**

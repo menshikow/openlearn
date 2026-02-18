@@ -7,6 +7,14 @@ agent: mentor
 
 Get Socratic guidance on implementation without being given the answer.
 
+## Important: Theory Mode
+
+This command provides guidance only. I will:
+- Explain concepts and patterns
+- Ask questions to guide your thinking
+- Show max 5-line examples
+- **NEVER** create files or write code for you
+
 ## Flow
 
 1. **Ask what they need help with**
@@ -24,7 +32,7 @@ Get Socratic guidance on implementation without being given the answer.
 
 3. **Provide guidance**
    - Explain the concept in simple terms
-   - Show a small pattern (max 8 lines)
+   - Show a small pattern (max 5 lines)
    - Query Context7 for official docs if relevant
    - Point to documentation
    - Ask: "How would you apply this to your code?"
