@@ -5,6 +5,14 @@ agent: mentor
 
 # /openlearn-docs
 
+
+## Important: Theory Mode
+
+This command provides information and guidance. I will:
+- Answer questions and provide explanations
+- Show max 5-line examples if relevant
+- **NEVER** create files or modify your code without permission
+
 Get guidance on writing documentation.
 
 ## Flow
