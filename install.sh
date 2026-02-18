@@ -283,12 +283,28 @@ if [ ! -f "$DB_PATH" ]; then
     show_progress "SQLite database will be created on first use"
 fi
 
-# Install dependencies with bun if available
-if command -v bun &> /dev/null && [ -f "$INSTALL_DIR/.opencode/package.json" ]; then
+# Install dependencies with best available package manager
+if [ -f "$INSTALL_DIR/.opencode/package.json" ]; then
     echo ""
-    show_progress "Installing dependencies with bun..."
-    cd "$INSTALL_DIR/.opencode" && bun install
-    show_success "Dependencies installed"
+    
+    # Detect package manager: bun > npm > pnpm
+    if command -v bun &> /dev/null; then
+        show_progress "Installing dependencies with bun..."
+        cd "$INSTALL_DIR/.opencode" && bun install
+        show_success "Dependencies installed with bun"
+    elif command -v npm &> /dev/null; then
+        show_progress "Installing dependencies with npm..."
+        cd "$INSTALL_DIR/.opencode" && npm install
+        show_success "Dependencies installed with npm"
+    elif command -v pnpm &> /dev/null; then
+        show_progress "Installing dependencies with pnpm..."
+        cd "$INSTALL_DIR/.opencode" && pnpm install
+        show_success "Dependencies installed with pnpm"
+    else
+        show_warning "No package manager found (bun, npm, or pnpm)"
+        echo "    You can install dependencies manually later:"
+        echo "      cd .opencode && bun install  # or npm install, pnpm install"
+    fi
 fi
 
 # Final success message
