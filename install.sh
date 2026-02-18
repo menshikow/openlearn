@@ -46,6 +46,37 @@ show_error() {
     echo -e "${RED}[✗]${NC} $1"
 }
 
+# Global profile functions
+get_global_profile_path() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "$HOME/Library/Application Support/openlearn/profile.json"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        echo "$HOME/.config/openlearn/profile.json"
+    else
+        echo "$HOME/.openlearn/profile.json"
+    fi
+}
+
+check_global_profile() {
+    local profile_path=$(get_global_profile_path)
+    if [ -f "$profile_path" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_with_bun() {
+    show_progress "Checking for bun..."
+    if command -v bun &> /dev/null; then
+        show_success "bun found"
+        return 0
+    else
+        show_warning "bun not found"
+        return 1
+    fi
+}
+
 # Check if opencode is installed
 show_progress "Checking for opencode..."
 if command -v opencode &> /dev/null; then
@@ -69,6 +100,43 @@ else
         exit 1
     fi
 fi
+
+# Check for existing global profile
+show_progress "Checking for global profile..."
+if check_global_profile; then
+    show_success "Global profile found"
+    echo ""
+    echo -e "${BLUE}A global OpenLearn profile already exists.${NC}"
+    echo ""
+    read -p "Use global profile for this project? (Y/n) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Nn]$ ]]; then
+        USE_GLOBAL_PROFILE=false
+        show_progress "Will create project-specific profile"
+    else
+        USE_GLOBAL_PROFILE=true
+        show_success "Will use global profile"
+    fi
+else
+    USE_GLOBAL_PROFILE=false
+    show_progress "No global profile found"
+    echo ""
+    echo -e "${BLUE}Would you like to create a global profile?${NC}"
+    echo "A global profile allows you to reuse settings across all projects."
+    echo ""
+    read -p "Create global profile? (y/N) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        CREATE_GLOBAL_PROFILE=true
+        show_success "Will create global profile"
+    else
+        CREATE_GLOBAL_PROFILE=false
+        show_progress "Will create project-specific profile"
+    fi
+fi
+
+# Check for bun
+install_with_bun
 
 # Set up variables
 REPO_URL="https://github.com/menshikow/openlearn.git"
@@ -131,15 +199,76 @@ echo ""
 
 merge_directory "$TEMP_DIR/openlearn/.opencode" "$INSTALL_DIR/.opencode" ".opencode"
 
-# Copy root level config files if they don't exist
-if [ ! -f "$INSTALL_DIR/AGENTS.md" ] && [ -f "$TEMP_DIR/openlearn/AGENTS.md" ]; then
-    cp "$TEMP_DIR/openlearn/AGENTS.md" "$INSTALL_DIR/AGENTS.md"
-    echo "    AGENTS.md: added"
+# Copy AGENTS.md and PROJECT.md to .opencode/openlearn/
+mkdir -p "$INSTALL_DIR/.opencode/openlearn"
+if [ -f "$TEMP_DIR/openlearn/AGENTS.md" ]; then
+    cp "$TEMP_DIR/openlearn/AGENTS.md" "$INSTALL_DIR/.opencode/openlearn/AGENTS.md"
+    echo "    AGENTS.md: copied to .opencode/openlearn/"
 fi
 
-if [ ! -f "$INSTALL_DIR/PROJECT.md" ] && [ -f "$TEMP_DIR/openlearn/PROJECT.md" ]; then
-    cp "$TEMP_DIR/openlearn/PROJECT.md" "$INSTALL_DIR/PROJECT.md"
-    echo "    PROJECT.md: added"
+if [ -f "$TEMP_DIR/openlearn/PROJECT.md" ]; then
+    cp "$TEMP_DIR/openlearn/PROJECT.md" "$INSTALL_DIR/.opencode/openlearn/PROJECT.md"
+    echo "    PROJECT.md: copied to .opencode/openlearn/"
+fi
+
+# Ask about temporary files in root
+echo ""
+echo -e "${BLUE}Would you like temporary copies of AGENTS.md and PROJECT.md in your project root?${NC}"
+echo "These files help during development but should not be committed."
+echo ""
+read -p "Keep temporary copies in root? (Y/n) " -n 1 -r
+echo ""
+if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+    # Copy to root as temporary files
+    if [ ! -f "$INSTALL_DIR/AGENTS.md" ] && [ -f "$TEMP_DIR/openlearn/AGENTS.md" ]; then
+        cp "$TEMP_DIR/openlearn/AGENTS.md" "$INSTALL_DIR/AGENTS.md"
+        echo "    AGENTS.md: temporary copy added to root"
+    fi
+    
+    if [ ! -f "$INSTALL_DIR/PROJECT.md" ] && [ -f "$TEMP_DIR/openlearn/PROJECT.md" ]; then
+        cp "$TEMP_DIR/openlearn/PROJECT.md" "$INSTALL_DIR/PROJECT.md"
+        echo "    PROJECT.md: temporary copy added to root"
+    fi
+    
+    show_success "Temporary files added (will be cleaned up on /openlearn-done)"
+else
+    show_success "Files kept only in .opencode/openlearn/"
+fi
+
+# Create global profile if requested
+if [ "$CREATE_GLOBAL_PROFILE" = true ]; then
+    show_progress "Creating global profile..."
+    GLOBAL_PROFILE_PATH=$(get_global_profile_path)
+    mkdir -p "$(dirname "$GLOBAL_PROFILE_PATH")"
+    
+    cat > "$GLOBAL_PROFILE_PATH" << 'PROFILEEOF'
+{
+  "version": "1.0.0",
+  "configured_at": null,
+  "profile": {
+    "type": "junior",
+    "settings": {
+      "background": "coding-basics",
+      "design_involvement": true,
+      "analogies": {
+        "enabled": false,
+        "source": null
+      }
+    }
+  },
+  "context7": {
+    "mode": "auto",
+    "enabled": true
+  },
+  "mode": "theory",
+  "preferences": {
+    "code_examples_max_lines": 5,
+    "auto_cleanup_temp_files": true
+  }
+}
+PROFILEEOF
+    
+    show_success "Global profile created at: $GLOBAL_PROFILE_PATH"
 fi
 
 echo ""
@@ -152,6 +281,14 @@ rm -rf "$TEMP_DIR"
 DB_PATH="$INSTALL_DIR/.opencode/openlearn/openlearn.db"
 if [ ! -f "$DB_PATH" ]; then
     show_progress "SQLite database will be created on first use"
+fi
+
+# Install dependencies with bun if available
+if command -v bun &> /dev/null && [ -f "$INSTALL_DIR/.opencode/package.json" ]; then
+    echo ""
+    show_progress "Installing dependencies with bun..."
+    cd "$INSTALL_DIR/.opencode" && bun install
+    show_success "Dependencies installed"
 fi
 
 # Final success message
@@ -168,8 +305,8 @@ echo ""
 echo "  2. Initialize your OpenLearn project"
 echo "     /openlearn-init"
 echo ""
-echo "  3. Plan your first feature"
-echo "     /openlearn-feature"
+echo "  3. Plan your first task"
+echo "     /openlearn-task"
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
