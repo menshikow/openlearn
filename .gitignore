@@ -81,3 +81,6 @@ PROJECT.md
 # OpenLearn database WAL files
 .opencode/openlearn/*.db-shm
 .opencode/openlearn/*.db-wal
+
+# OpenLearn JSON storage
+.opencode/openlearn/openlearn.json

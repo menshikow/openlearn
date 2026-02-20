@@ -277,10 +277,10 @@ show_success "File merge complete"
 # Cleanup
 rm -rf "$TEMP_DIR"
 
-# Check if SQLite database needs to be initialized
-DB_PATH="$INSTALL_DIR/.opencode/openlearn/openlearn.db"
+# Check if JSON storage file needs to be initialized
+DB_PATH="$INSTALL_DIR/.opencode/openlearn/openlearn.json"
 if [ ! -f "$DB_PATH" ]; then
-    show_progress "SQLite database will be created on first use"
+    show_progress "JSON storage file will be created on first use"
 fi
 
 # Install dependencies with best available package manager

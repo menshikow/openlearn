@@ -1,5 +1,5 @@
 ---
-description: Query past learnings from SQLite before starting
+description: Query past learnings from JSON storage before starting
 agent: mentor
 ---
 
@@ -17,9 +17,9 @@ Get advice based on past learnings before starting a task.
 
 ## Flow
 
-1. **Read past learnings from SQLite**
-   - Query `.opencode/openlearn/openlearn.db`
-   - Parse learnings table
+1. **Read past learnings from JSON storage**
+   - Read `.opencode/openlearn/openlearn.json`
+   - Parse `learnings` array
    - Search for relevant topics
 
 2. **Identify relevant learnings**
@@ -32,29 +32,31 @@ Get advice based on past learnings before starting a task.
    - Quote the key insight
    - Ask: "How might this apply here?"
 
-## Database Queries
+## Storage Queries
 
 ### Search by topic:
-```sql
-SELECT * FROM learnings 
-WHERE LOWER(topic) = LOWER(?)
-ORDER BY timestamp DESC
-LIMIT 5
+```typescript
+const byTopic = store.learnings
+  .filter((entry: any) => (entry.topic || "").toLowerCase() === topic.toLowerCase())
+  .sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
+  .slice(0, 5);
 ```
 
 ### Search by keyword:
-```sql
-SELECT * FROM learnings 
-WHERE LOWER(task) LIKE ? 
-   OR LOWER(what_learned) LIKE ?
-ORDER BY timestamp DESC
+```typescript
+const byKeyword = store.learnings
+  .filter((entry: any) =>
+    entry.task.toLowerCase().includes(keyword) ||
+    entry.what_learned.toLowerCase().includes(keyword)
+  )
+  .sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp));
 ```
 
 ### Get top topics:
-```sql
-SELECT name, count FROM topics 
-ORDER BY count DESC 
-LIMIT 10
+```typescript
+const topTopics = [...store.topics]
+  .sort((a: any, b: any) => b.count - a.count)
+  .slice(0, 10);
 ```
 
 ## Example Session
@@ -65,7 +67,7 @@ Student: /openlearn-advise
 OpenLearn: What are you about to work on?
 Student: Adding a form to edit todos
 
-OpenLearn: [Querying database for relevant learnings...]
+OpenLearn: [Reading storage for relevant learnings...]
 
 💡 Based on your past learnings:
 
@@ -107,9 +109,9 @@ const topTopics = getTopics().slice(0, 5);
 
 ## No Learnings Yet?
 
-If the database is empty:
+If storage is empty:
 ```
-OpenLearn: No previous learnings found in your database yet.
+OpenLearn: No previous learnings found in your storage yet.
 
 That's normal when starting out! After you complete a few tasks,
 use /openlearn-retro to capture what you've learned.

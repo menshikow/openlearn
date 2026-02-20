@@ -1,5 +1,5 @@
 ---
-description: Capture what was learned and save to SQLite and markdown
+description: Capture what was learned and save to JSON and markdown
 agent: mentor
 ---
 
@@ -32,27 +32,30 @@ Capture learnings from a completed task and store them for future reference.
    - Save to `.opencode/openlearn/learnings/`
    - Format: `YYYY-MM-DD-[slug].md`
 
-4. **Save to SQLite database**
-   - Store in `openlearn.db` for fast querying
-   - Update topics table
+4. **Save to JSON storage**
+   - Store in `openlearn.json` for querying
+   - Update topics collection
    - Link related learnings
 
 5. **Update topics encountered**
    - Add new technologies/concepts to config
    - Increment encounter count
 
-## Database Schema
+## Storage Schema
 
-The learning is saved to the `learnings` table:
-```sql
-INSERT INTO learnings (timestamp, task, topic, what_learned, mistakes)
-VALUES (?, ?, ?, ?, ?)
+The learning is saved under the `learnings` array:
+```json
+{
+  "id": 12,
+  "timestamp": "2026-02-17T10:00:00.000Z",
+  "task": "Todo App - State Management",
+  "topic": "React Hooks",
+  "what_learned": "State should be lifted to the common parent",
+  "mistakes": "Tried to keep duplicate state in child components"
+}
 ```
 
-And topics are updated in the `topics` table:
-```sql
-INSERT OR UPDATE topics (name, first_encountered, last_encountered, count)
-```
+Topics are updated in the `topics` array using normalized names and incremented counts.
 
 ## Example Session
 
@@ -71,11 +74,11 @@ Student: I tried to put state in each TodoItem at first
 OpenLearn: What would you tell your past self?
 Student: Think about which component owns the data before adding state
 
-[Generating learning file and saving to database...]
+[Generating learning file and saving to JSON storage...]
 
 ✅ Learning captured!
 Saved to: learnings/2026-02-17-todo-app-usestate.md
-Saved to database: openlearn.db
+Saved to storage: openlearn.json
 
 Updated topics: React hooks, State management
 Learning #12 recorded successfully
@@ -120,11 +123,11 @@ If multiple components need it, lift it up.
 
 ## Implementation Notes
 
-Use the database module:
+Use the storage module:
 ```typescript
 import { saveLearning, recordTopic } from "./src/db.ts";
 
-// Save learning to SQLite
+// Save learning to JSON storage
 const learningId = saveLearning({
   timestamp: new Date().toISOString(),
   task: "Todo App - State Management",

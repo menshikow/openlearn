@@ -328,10 +328,10 @@ if (Test-Path $packageJsonPath) {
 # Cleanup
 Remove-Item -Recurse -Force $TempDir -ErrorAction SilentlyContinue
 
-# Check if SQLite database needs to be initialized
-$DbPath = Join-Path $InstallDir ".opencode\openlearn\openlearn.db"
+# Check if JSON storage file needs to be initialized
+$DbPath = Join-Path $InstallDir ".opencode\openlearn\openlearn.json"
 if (-not (Test-Path $DbPath)) {
-    Show-Progress "SQLite database will be created on first use"
+    Show-Progress "JSON storage file will be created on first use"
 }
 
 # Final success message

@@ -1,5 +1,5 @@
 ---
-description: Check progress from SQLite database
+description: Check progress from JSON storage
 agent: mentor
 ---
 
@@ -21,7 +21,7 @@ Check project progress and stats from the database.
    - Read `.opencode/openlearn/config.json`
    - Read `.opencode/openlearn/product/roadmap.md`
 
-2. **Query SQLite database for stats**
+2. **Read JSON storage for stats**
    - Total learnings captured
    - Topics encountered
    - Recent activity (30 days)
@@ -39,7 +39,7 @@ Check project progress and stats from the database.
    - Current tasks
    - Learning statistics
 
-## Database Queries
+## Storage Queries
 
 ### Get learning stats:
 ```typescript
@@ -56,30 +56,16 @@ const topics = getTopics();
 // Returns: Array of topics with encounter counts
 ```
 
-### SQL equivalents:
-```sql
--- Total learnings
-SELECT COUNT(*) FROM learnings;
+### JSON equivalents:
+```typescript
+import { readFileSync } from "fs";
 
--- Topics encountered
-SELECT COUNT(*) FROM topics;
+const raw = readFileSync(".opencode/openlearn/openlearn.json", "utf8");
+const store = JSON.parse(raw);
 
--- Recent learnings (30 days)
-SELECT COUNT(*) FROM learnings 
-WHERE timestamp > datetime('now', '-30 days');
-
--- Active objectives
-SELECT COUNT(*) FROM objectives WHERE status = 'active';
-
--- Top topics
-SELECT name, count FROM topics ORDER BY count DESC LIMIT 5;
-
--- Gate pass rate
-SELECT 
-  COUNT(*) as total,
-  SUM(CASE WHEN passed = 1 THEN 1 ELSE 0 END) as passed,
-  AVG(score) as avg_score
-FROM gate_results;
+const totalLearnings = store.learnings.length;
+const totalTopics = store.topics.length;
+const activeObjectives = store.objectives.filter((o: any) => o.status === "active").length;
 ```
 
 ## Example Output
@@ -127,7 +113,7 @@ Average score: 82/100
 Next: Complete localStorage persistence
 
 💾 Data Storage:
-Database: .opencode/openlearn/openlearn.db
+JSON Store: .opencode/openlearn/openlearn.json
 Learnings: .opencode/openlearn/learnings/
 ```
 

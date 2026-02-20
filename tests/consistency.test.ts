@@ -31,7 +31,7 @@ describe('Documentation Consistency', () => {
       const content = fs.readFileSync(filePath, 'utf8');
       
       // Check for "8 lines" or "8-line" patterns (but not "5" near them)
-      const eightLinePattern = /8\s*lines?|8-line/gi;
+      const eightLinePattern = /8\s*lines?|8-line/i;
       const lines = content.split('\n');
       
       lines.forEach((line, index) => {

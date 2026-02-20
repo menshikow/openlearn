@@ -45,6 +45,9 @@ describe('Installation Scripts', () => {
     expect(content).toContain('.opencode/openlearn');
     expect(content).toContain('AGENTS.md');
     expect(content).toContain('PROJECT.md');
+
+    // Check for JSON storage message
+    expect(content).toContain('openlearn.json');
   });
 
   test('install.ps1 exists', () => {
@@ -65,6 +68,9 @@ describe('Installation Scripts', () => {
     
     // Check for new file structure
     expect(content).toContain('.opencode\\openlearn');
+
+    // Check for JSON storage message
+    expect(content).toContain('openlearn.json');
   });
 });
 
