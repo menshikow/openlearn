@@ -9,7 +9,7 @@
     "test:frontmatter": "bun test tests/frontmatter.test.ts",
     "test:json": "bun test tests/json.test.ts",
     "test:references": "bun test tests/references.test.ts",
-    "test:db": "bun test tests/db.test.ts",
+    "test:db": "bun test ./tests/database.test.ts",
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
     "db:init": "bun run src/db.ts"
