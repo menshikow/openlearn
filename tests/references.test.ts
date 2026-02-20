@@ -22,25 +22,45 @@ describe('Cross-Reference Validation', () => {
   
   const rootDir = findProjectRoot();
 
+  function getAgentsReferencePath(): string | null {
+    const canonicalPath = path.join(rootDir, '.opencode/openlearn/AGENTS.md');
+    if (fs.existsSync(canonicalPath)) {
+      return canonicalPath;
+    }
+
+    const legacyPath = path.join(rootDir, 'AGENTS.md');
+    if (fs.existsSync(legacyPath)) {
+      return legacyPath;
+    }
+
+    return null;
+  }
+
   test('AGENTS.md references existing commands', async () => {
-    const agentsMdPath = path.join(rootDir, 'AGENTS.md');
+    const agentsMdPath = getAgentsReferencePath();
+    expect(agentsMdPath).not.toBeNull();
+    if (!agentsMdPath) {
+      return;
+    }
+
     const agentsMdContent = fs.readFileSync(agentsMdPath, 'utf-8');
     
     const commandsDir = path.join(rootDir, '.opencode/commands');
     const commandFiles = await glob('*.md', { cwd: commandsDir });
     const commandNames = commandFiles.map(f => f.replace('.md', ''));
 
-    // Check that each command is mentioned in AGENTS.md
-    // Skip test if file doesn't exist or is empty
-    if (fs.existsSync(agentsMdPath)) {
-      commandNames.forEach(cmd => {
-        expect(agentsMdContent).toContain(cmd);
-      });
-    }
+    commandNames.forEach(cmd => {
+      expect(agentsMdContent).toContain(cmd);
+    });
   });
 
   test('AGENTS.md references existing agents', async () => {
-    const agentsMdPath = path.join(rootDir, 'AGENTS.md');
+    const agentsMdPath = getAgentsReferencePath();
+    expect(agentsMdPath).not.toBeNull();
+    if (!agentsMdPath) {
+      return;
+    }
+
     const agentsMdContent = fs.readFileSync(agentsMdPath, 'utf-8');
     
     const agentsDir = path.join(rootDir, '.opencode/agents');

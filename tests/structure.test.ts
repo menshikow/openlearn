@@ -67,7 +67,7 @@ describe('Project Structure', () => {
     expect(commandFiles.length).toBeGreaterThan(0);
     
     commandFiles.forEach(file => {
-      expect(file).toMatch(/^openlearn-[a-z-]+\.md$/);
+      expect(file).toMatch(/^openlearn-[a-z0-9-]+\.md$/);
     });
   });
 
