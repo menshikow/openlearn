@@ -4,7 +4,7 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   testMatch: ['**/*.test.ts'],
   collectCoverageFrom: [
-    'tests/**/*.ts',
+    'src/**/*.ts',
     '!tests/**/*.d.ts',
   ],
   coverageThreshold: {
