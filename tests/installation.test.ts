@@ -35,6 +35,10 @@ describe('Installation Scripts', () => {
     // Check for global profile support
     expect(content).toContain('get_global_profile_path');
     expect(content).toContain('check_global_profile');
+    expect(content).toContain('prompt_yn');
+    expect(content).toContain('/dev/tty');
+    expect(content).toContain('--non-interactive');
+    expect(content).toContain('--yes');
     
     // Check for package manager auto-detection
     expect(content).toContain('bun');

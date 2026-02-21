@@ -17,7 +17,7 @@ OpenLearn transforms opencode from a code generator into a teaching mentor. You 
 ### macOS/Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh)
 ```
 
 ### Windows (PowerShell)

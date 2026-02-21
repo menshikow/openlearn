@@ -19,7 +19,7 @@ OpenLearn verwandelt opencode von einem Code-Generator in einen Lehrmentor. Du s
 Ein Befehl, der überall funktioniert. Erkennt automatisch deinen Package Manager (bun → npm → pnpm):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh)
 ```
 
 ### Windows (PowerShell)

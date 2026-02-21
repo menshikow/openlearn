@@ -19,7 +19,7 @@ OpenLearn превращает opencode из генератора кода в у
 Одна команда, работает везде. Автоматически определяет твой package manager (bun → npm → pnpm):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/menshikow/openlearn/main/install.sh)
 ```
 
 ### Windows (PowerShell)

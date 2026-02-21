@@ -6,6 +6,12 @@
 
 set -e
 
+# Defaults and flags
+NON_INTERACTIVE=false
+ASSUME_YES=false
+USE_GLOBAL_PROFILE=false
+CREATE_GLOBAL_PROFILE=false
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -46,6 +52,68 @@ show_error() {
     echo -e "${RED}[✗]${NC} $1"
 }
 
+show_usage() {
+    cat << 'EOF'
+Usage: install.sh [options]
+
+Options:
+  -y, --yes            Non-interactive mode, assume yes for all prompts
+      --non-interactive Non-interactive mode, use default answers
+  -h, --help           Show this help message
+EOF
+}
+
+parse_args() {
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -y|--yes)
+                ASSUME_YES=true
+                NON_INTERACTIVE=true
+                ;;
+            --non-interactive)
+                NON_INTERACTIVE=true
+                ;;
+            -h|--help)
+                show_usage
+                exit 0
+                ;;
+            *)
+                show_warning "Unknown option: $1"
+                show_usage
+                exit 1
+                ;;
+        esac
+        shift
+    done
+}
+
+prompt_yn() {
+    local prompt="$1"
+    local default="$2"
+
+    if [ "$ASSUME_YES" = true ]; then
+        REPLY="Y"
+        show_progress "Auto-yes: ${prompt}"
+        return
+    fi
+
+    if [ "$NON_INTERACTIVE" = true ] || [ ! -r /dev/tty ]; then
+        REPLY="$default"
+        if [[ "$default" =~ ^[Yy]$ ]]; then
+            show_progress "No TTY detected, defaulting to yes: ${prompt}"
+        else
+            show_progress "No TTY detected, defaulting to no: ${prompt}"
+        fi
+        return
+    fi
+
+    read -p "$prompt" -n 1 -r < /dev/tty
+    echo ""
+    if [ -z "$REPLY" ]; then
+        REPLY="$default"
+    fi
+}
+
 # Global profile functions
 get_global_profile_path() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -78,6 +146,8 @@ install_with_bun() {
 }
 
 # Check if opencode is installed
+parse_args "$@"
+
 show_progress "Checking for opencode..."
 if command -v opencode &> /dev/null; then
     show_success "opencode found: $(opencode --version 2>/dev/null || echo 'installed')"
@@ -93,8 +163,7 @@ else
     echo ""
     echo -e "${YELLOW}You can continue installation, but opencode is required to use OpenLearn.${NC}"
     echo ""
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo ""
+    prompt_yn "Continue anyway? (y/N) " "N"
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         show_error "Installation cancelled"
         exit 1
@@ -108,8 +177,7 @@ if check_global_profile; then
     echo ""
     echo -e "${BLUE}A global OpenLearn profile already exists.${NC}"
     echo ""
-    read -p "Use global profile for this project? (Y/n) " -n 1 -r
-    echo ""
+    prompt_yn "Use global profile for this project? (Y/n) " "Y"
     if [[ $REPLY =~ ^[Nn]$ ]]; then
         USE_GLOBAL_PROFILE=false
         show_progress "Will create project-specific profile"
@@ -124,8 +192,7 @@ else
     echo -e "${BLUE}Would you like to create a global profile?${NC}"
     echo "A global profile allows you to reuse settings across all projects."
     echo ""
-    read -p "Create global profile? (y/N) " -n 1 -r
-    echo ""
+    prompt_yn "Create global profile? (y/N) " "N"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         CREATE_GLOBAL_PROFILE=true
         show_success "Will create global profile"
@@ -216,8 +283,7 @@ echo ""
 echo -e "${BLUE}Would you like temporary copies of AGENTS.md and PROJECT.md in your project root?${NC}"
 echo "These files help during development but should not be committed."
 echo ""
-read -p "Keep temporary copies in root? (Y/n) " -n 1 -r
-echo ""
+prompt_yn "Keep temporary copies in root? (Y/n) " "Y"
 if [[ ! $REPLY =~ ^[Nn]$ ]]; then
     # Copy to root as temporary files
     if [ ! -f "$INSTALL_DIR/AGENTS.md" ] && [ -f "$TEMP_DIR/openlearn/AGENTS.md" ]; then
