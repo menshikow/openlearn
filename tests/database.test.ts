@@ -1,5 +1,4 @@
 import { test, expect, describe, beforeEach, afterEach } from "bun:test";
-import { Database as SQLiteDatabase } from "bun:sqlite";
 import * as fs from "fs";
 import * as path from "path";
 import {
@@ -291,69 +290,6 @@ describe("JSON Storage Operations", () => {
   test("OPENLEARN_STORAGE_DIR overrides default storage location", () => {
     const storagePath = getStoragePath();
     expect(storagePath.startsWith(process.env.OPENLEARN_STORAGE_DIR || "")).toBe(true);
-  });
-
-  test("migrates existing sqlite data to json storage", () => {
-    const storageDir = process.env.OPENLEARN_STORAGE_DIR as string;
-    const sqlitePath = path.join(storageDir, "openlearn.db");
-    const jsonPath = path.join(storageDir, "openlearn.json");
-
-    if (fs.existsSync(jsonPath)) {
-      fs.unlinkSync(jsonPath);
-    }
-
-    const sqlite = new SQLiteDatabase(sqlitePath);
-    sqlite.exec(`
-      CREATE TABLE topics (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE NOT NULL,
-        first_encountered TEXT NOT NULL,
-        last_encountered TEXT NOT NULL,
-        count INTEGER DEFAULT 1
-      );
-      CREATE TABLE learnings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        timestamp TEXT NOT NULL,
-        task TEXT NOT NULL,
-        topic TEXT,
-        what_learned TEXT NOT NULL,
-        mistakes TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE objectives (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        objective TEXT NOT NULL,
-        status TEXT DEFAULT 'active',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        completed_at TEXT
-      );
-      CREATE TABLE gate_results (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-        task_name TEXT NOT NULL,
-        gate_name TEXT NOT NULL,
-        score INTEGER,
-        passed BOOLEAN,
-        feedback TEXT
-      );
-    `);
-
-    sqlite.run(
-      "INSERT INTO topics (name, first_encountered, last_encountered, count) VALUES (?, ?, ?, ?)",
-      ["react", new Date().toISOString(), new Date().toISOString(), 2]
-    );
-    sqlite.run(
-      "INSERT INTO learnings (timestamp, task, topic, what_learned, mistakes) VALUES (?, ?, ?, ?, ?)",
-      [new Date().toISOString(), "Legacy task", "React", "Migrated learning", "None"]
-    );
-    sqlite.close();
-
-    closeDatabase();
-    initializeSchema();
-
-    expect(fs.existsSync(jsonPath)).toBe(true);
-    expect(getTopics().length).toBe(1);
-    expect(getLearnings().length).toBe(1);
   });
 
   test("normalizes malformed json store and keeps valid records", () => {

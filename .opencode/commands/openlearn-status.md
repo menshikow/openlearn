@@ -13,7 +13,7 @@ This command provides information and guidance. I will:
 - Show max 5-line examples if relevant
 - **NEVER** create files or modify your code without permission
 
-Check project progress and stats from the database.
+Check project progress and stats from JSON storage.
 
 ## Flow
 

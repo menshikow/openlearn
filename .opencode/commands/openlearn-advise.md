@@ -92,7 +92,7 @@ Also, remember to handle the controlled input pattern.
 
 ## Implementation Notes
 
-Use the database module:
+Use the storage module:
 ```typescript
 import { searchLearnings, getLearningsByTopic, getTopics } from "./src/db.ts";
 

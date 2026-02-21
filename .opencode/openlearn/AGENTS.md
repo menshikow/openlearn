@@ -45,7 +45,7 @@ Commands invoke specific agents based on their function:
 - `/openlearn-done` - Invokes all 6 gate agents for quality checks
 - `/openlearn-stuck` - Uses mentor agent with debugging protocols
 - `/openlearn-retro` - Uses mentor agent to capture learnings
-- `/openlearn-advise` - Queries learning database via mentor agent
+- `/openlearn-advise` - Queries learning storage via mentor agent
 - `/openlearn-status` - Displays stats using mentor agent
 - `/openlearn-test` - Invokes testing-gate agent
 - `/openlearn-task` - Uses mentor agent for task planning

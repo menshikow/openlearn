@@ -35,41 +35,23 @@ OpenLearn is an AI-mentored development framework for opencode. It transforms op
 | 📖 | Fundamentals | No | Code quality | - |
 | 🧪 | Testing | No | Test coverage | - |
 
-## Database Schema
+## JSON Storage Schema
 
-### Tables
+OpenLearn persists data in `.opencode/openlearn/openlearn.json`.
 
-#### topics
-- `id` - INTEGER PRIMARY KEY AUTOINCREMENT
-- `name` - TEXT UNIQUE NOT NULL
-- `first_encountered` - TEXT NOT NULL (ISO timestamp)
-- `last_encountered` - TEXT NOT NULL (ISO timestamp)
-- `count` - INTEGER DEFAULT 1
+### Top-level shape
+- `version` - schema version string
+- `topics` - topic history entries
+- `learnings` - captured learning entries
+- `objectives` - tracked objectives
+- `gate_results` - quality gate outcomes
+- `counters` - numeric ID counters for each collection
 
-#### learnings
-- `id` - INTEGER PRIMARY KEY AUTOINCREMENT
-- `timestamp` - TEXT NOT NULL (ISO timestamp)
-- `task` - TEXT NOT NULL
-- `topic` - TEXT (nullable)
-- `what_learned` - TEXT NOT NULL
-- `mistakes` - TEXT (nullable)
-- `created_at` - TEXT DEFAULT CURRENT_TIMESTAMP
-
-#### objectives
-- `id` - INTEGER PRIMARY KEY AUTOINCREMENT
-- `objective` - TEXT NOT NULL
-- `status` - TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'abandoned'))
-- `created_at` - TEXT DEFAULT CURRENT_TIMESTAMP
-- `completed_at` - TEXT (nullable)
-
-#### gate_results
-- `id` - INTEGER PRIMARY KEY AUTOINCREMENT
-- `timestamp` - TEXT DEFAULT CURRENT_TIMESTAMP
-- `task_name` - TEXT NOT NULL
-- `gate_name` - TEXT NOT NULL
-- `score` - INTEGER
-- `passed` - BOOLEAN
-- `feedback` - TEXT (nullable)
+### Record fields
+- `topics[]` - `id`, `name`, `first_encountered`, `last_encountered`, `count`
+- `learnings[]` - `id`, `timestamp`, `task`, `topic?`, `what_learned`, `mistakes?`, `created_at`
+- `objectives[]` - `id`, `objective`, `status` (`active` | `completed` | `abandoned`), `created_at`, `completed_at?`
+- `gate_results[]` - `id`, `timestamp`, `task_name`, `gate_name`, `score`, `passed`, `feedback?`
 
 ## Context7 Integration
 

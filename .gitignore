@@ -42,10 +42,7 @@ coverage/
 logs/
 *.log
 
-# SQLite database files
 *.db
-*.sqlite
-*.sqlite3
 
 # Temporary files
 tmp/
@@ -81,10 +78,6 @@ notes.md
 # Keep canonical OpenLearn docs under .opencode/openlearn tracked
 !.opencode/openlearn/AGENTS.md
 !.opencode/openlearn/PROJECT.md
-
-# OpenLearn database WAL files
-.opencode/openlearn/*.db-shm
-.opencode/openlearn/*.db-wal
 
 # OpenLearn JSON storage
 .opencode/openlearn/openlearn.json
