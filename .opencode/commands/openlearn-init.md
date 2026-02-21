@@ -46,11 +46,18 @@ Maximum 5 lines of example code at a time. Never write production code for you.
    - Store in config: `"mode": "theory" | "build"`
 
 5. **Project questions**
-   - Ask: "What problem are you solving?" (free text)
+   - Ask: "What problem are you solving?" (free text, single input; no placeholder options)
    - Ask: "Who is this for?"
-     - Options: Myself learning, Portfolio project, Real users
+      - Options: Myself learning, Portfolio project, Real users
    - Ask: "How will you know it's done?"
-     - List 2-3 specific, measurable criteria
+      - Free text, single input; no duplicate "type your answer" options
+      - List 2-3 specific, measurable criteria
+
+### Question UI rules
+
+- For free-text questions, provide one text-entry path only.
+- Do not add option labels like "Type your answer" when custom input is already available.
+- For strict choice questions, disable custom input so only listed choices are shown.
 
 6. **Stack detection**
    - Check for existing files:

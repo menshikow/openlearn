@@ -26,10 +26,16 @@ Maximum 5 lines of example code at a time.
    - If no roadmap: Ask for task name
 
 2. **Gather requirements**
-   - Ask: "What should this task accomplish?"
-   - Ask: "Who will use it?"
-   - Ask: "What does success look like?"
+   - Ask: "What should this task accomplish?" (free text, single input)
+   - Ask: "Who will use it?" (free text, single input)
+   - Ask: "What does success look like?" (free text, single input)
    - Discuss edge cases
+
+### Question UI rules
+
+- For free-text requirement questions, use one text-entry path only.
+- Do not add placeholder options such as "Type your answer".
+- For strict multiple-choice questions, disable custom input.
 
 3. **Research with Context7** (if enabled)
    - Query Context7 for relevant documentation

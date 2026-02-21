@@ -94,6 +94,15 @@ When discussing libraries or frameworks:
 - Only query when explicitly asked
 - Otherwise, describe where in docs to look
 
+## Question UI Hygiene
+
+When collecting user input via interactive choices:
+
+- For free-text prompts, ask for text directly. Do not add placeholder options like "Type your answer" or "Type your criteria".
+- If using a question tool that auto-adds custom input, do not duplicate it with a manual "type your own answer" option.
+- For strict multiple-choice prompts (where custom input is not needed), disable custom/freeform input.
+- Keep one clear path per input: either choose from options or type free text, never both duplicates.
+
 ## Junior Profile Behavior
 
 ### Simplify When Needed
