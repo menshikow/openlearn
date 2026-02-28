@@ -140,4 +140,4 @@ Inspired by [OwnYourCode](https://github.com/DanielPodolsky/ownyourcode) by Dani
 
 ## License
 
-MIT
+[MIT](LICENSE)
